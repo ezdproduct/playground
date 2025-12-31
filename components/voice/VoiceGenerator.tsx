@@ -211,7 +211,7 @@ export function VoiceGenerator() {
                                 onChange={(e) => setLanguage(e.target.value)}
                             >
                                 {languages.map((l) => (
-                                    <SelectItem key={l.id} value={l.id}>{l.name}</SelectItem>
+                                    <SelectItem key={l.id}>{l.name}</SelectItem>
                                 ))}
                             </Select>
 
