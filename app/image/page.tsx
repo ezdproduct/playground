@@ -1,52 +1,46 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Download, ImageIcon, Loader2 } from "lucide-react"
-import { useMutation } from "@/hooks/use-mutation"
-import { LoadingDisplay } from "@/components/ui/loading-display"
-import { EmptyState } from "@/components/ui/empty-state"
+import { useState, useCallback } from "react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Download, ImageIcon, Loader2 } from "lucide-react";
+import { useMutation } from "@/hooks/use-mutation";
+import { LoadingDisplay } from "@/components/ui/loading-display";
+import { EmptyState } from "@/components/ui/empty-state";
 
-type ImageResponse = { imageUrl?: string; base64?: string }
+const IMAGE_SIZES = ["256x256", "512x512", "1024x1024"] as const;
+
+type ImageResponse = { imageUrl?: string; base64?: string };
 
 export default function ImagePage() {
-    const [prompt, setPrompt] = useState("")
-    const [size, setSize] = useState("1024x1024")
+    const [prompt, setPrompt] = useState("");
+    const [size, setSize] = useState<typeof IMAGE_SIZES[number]>("1024x1024");
 
-    const {
-        data,
-        error,
-        isLoading,
-        mutate
-    } = useMutation<ImageResponse, { prompt: string; size: string }>("/api/image")
+    const { data, error, isLoading, mutate } = useMutation<ImageResponse, { prompt: string; size: string }>("/api/image");
 
-    const handleGenerate = async () => {
-        if (!prompt) return
-        await mutate({ prompt, size })
-    }
+    const handleGenerate = useCallback(async () => {
+        if (!prompt) return;
+        await mutate({ prompt, size });
+    }, [prompt, size, mutate]);
 
-    const image = data?.imageUrl || data?.base64
+    const image = data?.imageUrl || data?.base64;
 
     return (
         <div className="mx-auto max-w-3xl space-y-8">
             <div className="space-y-2 text-center">
                 <h1 className="text-3xl font-bold tracking-tight">Text to Image</h1>
-                <p className="text-muted-foreground">
-                    Transform your words into stunning visuals using AI.
-                </p>
+                <p className="text-muted-foreground">Transform your words into stunning visuals using AI.</p>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
-                <Card className="flex flex-col md:col-span-1">
+                <Card className="flex flex-col">
                     <CardHeader>
                         <CardTitle>Configuration</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="space-y-2">
-                            <Label>Description</Label>
+                            <label className="block text-sm font-medium">Description</label>
                             <Textarea
                                 placeholder="A futuristic city with flying cars..."
                                 className="min-h-[120px] resize-none"
@@ -55,9 +49,9 @@ export default function ImagePage() {
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label>Size</Label>
+                            <label className="block text-sm font-medium">Size</label>
                             <div className="flex gap-2">
-                                {["256x256", "512x512", "1024x1024"].map((s) => (
+                                {IMAGE_SIZES.map((s) => (
                                     <Button
                                         key={s}
                                         variant={size === s ? "default" : "outline"}
@@ -83,7 +77,7 @@ export default function ImagePage() {
                     </CardFooter>
                 </Card>
 
-                <Card className="flex min-h-[350px] flex-col md:col-span-1">
+                <Card className="flex min-h-[350px] flex-col">
                     <CardHeader>
                         <CardTitle>Result</CardTitle>
                     </CardHeader>
@@ -116,5 +110,5 @@ export default function ImagePage() {
                 </Card>
             </div>
         </div>
-    )
+    );
 }

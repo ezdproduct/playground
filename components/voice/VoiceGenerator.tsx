@@ -239,9 +239,7 @@ export function VoiceGenerator() {
                         <CardHeader className="flex flex-row justify-between items-center pb-2">
                             <h4 className="text-large font-bold">Text Input</h4>
                             <div className="flex items-center gap-4">
-                                <Chip size="sm" variant="flat" color={isAsync ? "success" : "default"}>
-                                    {isAsync ? "Async Mode" : "Instant Mode"}
-                                </Chip>
+
                                 <Switch
                                     size="sm"
                                     isSelected={isAsync}

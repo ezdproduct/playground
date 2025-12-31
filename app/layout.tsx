@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
+import { Sidebar } from "@/components/layout/Sidebar";
 import { Footer } from "@/components/layout/Footer";
 import { Providers } from "./providers";
 
@@ -28,14 +29,22 @@ export default function RootLayout({
   return (
     <html lang="en" className="light">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background font-sans text-foreground antialiased flex flex-col`}
+        className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background font-sans text-foreground antialiased`}
       >
         <Providers>
-          <Header />
-          <main className="flex-1 w-full p-4 md:p-6 lg:p-8">
-            {children}
-          </main>
-          <Footer />
+          <div className="flex h-screen overflow-hidden">
+            {/* Sidebar Navigation */}
+            <Sidebar />
+
+            {/* Main Content Area */}
+            <div className="flex flex-1 flex-col overflow-hidden">
+              <Header />
+              <main className="flex-1 overflow-auto p-4 md:p-6 lg:p-8">
+                {children}
+              </main>
+              <Footer />
+            </div>
+          </div>
         </Providers>
       </body>
     </html>
